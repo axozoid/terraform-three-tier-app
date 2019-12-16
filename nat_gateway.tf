@@ -20,4 +20,8 @@ resource "aws_nat_gateway" "gw" {
 resource "aws_eip" "eip_nat_gw" {
   vpc        = true
   depends_on = ["aws_internet_gateway.igw"]
+
+  tags = {
+    Name = "EIP for gw NAT"
+  }
 }

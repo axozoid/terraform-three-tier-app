@@ -1,15 +1,5 @@
 ### frontend ###
 
-resource "aws_launch_configuration" "lc_frontend" {
-  lifecycle {
-    create_before_destroy = true
-  }
-  name_prefix   = "lc_frontend_"
-  image_id      = "${data.aws_ami.ubuntu.id}"
-  instance_type = "${var.lc_frontend_instance_type}"
-  key_name      = "${aws_key_pair.tf-key.key_name}"
-}
-
 # scaling up
 resource "aws_autoscaling_policy" "scale_up" {
   name                   = "${var.asg_scale_up}"
@@ -65,29 +55,6 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
 
   alarm_actions     = [aws_autoscaling_policy.scale_down.arn]
   alarm_description = "Scale down when the CPU usage is lower than ${var.cw_cpu_low_min_threshold} during ${var.cw_statistic_period} seconds."
-}
-
-# ASG
-resource "aws_autoscaling_group" "asg_frontend" {
-  name                 = "${var.asg_frontend}"
-  launch_configuration = "${aws_launch_configuration.lc_frontend.name}"
-  min_size             = var.asg_frontend_min
-  max_size             = var.asg_frontend_max
-  health_check_type    = "${var.asg_frontend_health_check_type}"
-  vpc_zone_identifier  = ["${aws_subnet.subnet_a_frontend.id}", "${aws_subnet.subnet_b_frontend.id}"]
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-# ELB
-resource "aws_lb" "lb_frontend" {
-  name                             = "${var.lb_frontend}"
-  load_balancer_type               = "network"
-  enable_cross_zone_load_balancing = true
-  subnets                          = ["${aws_subnet.subnet_a_frontend.id}", "${aws_subnet.subnet_b_frontend.id}"]
-
 }
 
 

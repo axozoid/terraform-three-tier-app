@@ -88,7 +88,23 @@ variable "rt_to_igw" {
 }
 variable "lb_frontend" {
   type    = string
-  default = "lb_frontend"
+  default = "lb-frontend"
+}
+variable "lb_frontend_protocol" {
+  type    = string
+  default = "http"
+}
+variable "lb_frontend_target_health_protocol" {
+  type    = string
+  default = "HTTP"
+}
+variable "sg_bastion" {
+  type    = string
+  default = "sg_bastion"
+}
+variable "sgr_lb_ingress_port" {
+  type    = number
+  default = 80
 }
 variable "sgr_frontend_ingress_port" {
   type    = number
@@ -98,6 +114,38 @@ variable "sgr_frontend_ingress_port" {
 variable "lc_frontend_instance_type" {
   type    = string
   default = "t2.micro"
+}
+variable "bastion_instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+variable "bastion_name" {
+  type    = string
+  default = "bastion_host"
+}
+variable "sg_db" {
+  type    = string
+  default = "sg_db"
+}
+variable "sgr_db_port" {
+  type    = number
+  default = 3306
+}
+variable "lc_frontend_root_device_type" {
+  type    = string
+  default = "gp2"
+}
+variable "frontend_ami_id" {
+  type    = string
+  default = "ami-04a0f7552cff370ba"
+}
+variable "bastion_ami_id" {
+  type    = string
+  default = "ami-04a0f7552cff370ba"
+}
+variable "lc_frontend_root_device_size" {
+  type    = number
+  default = 20
 }
 
 variable "asg_frontend" {
@@ -191,6 +239,14 @@ variable "cw_number_of_periods" {
 variable "cw_statistic_type" {
   type    = string
   default = "Average"
+}
+variable "sg_bastion_port" {
+  type    = number
+  default = 22
+}
+variable "sg_bastion_cidrs" {
+  type    = list
+  default = ["0.0.0.0/0", "1.2.3.4/32"]
 }
 
 
