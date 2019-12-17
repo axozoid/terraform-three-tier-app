@@ -12,4 +12,26 @@ sgr_lb_ingress_port = 80
 # a port frontend servers are listening on
 sgr_frontend_ingress_port = 8080
 
+# database port
+sgr_db_port = 3306
 
+# backend instance type
+lc_backend_instance_type = "t2.micro"
+
+# frontend instance type
+lc_frontend_instance_type = "t2.micro"
+
+# number of instances for frontend
+asg_frontend_min = 2
+asg_frontend_max = 4
+
+# number of instances for backend
+asg_backend_min = 1
+asg_backend_max = 4
+
+# database settings
+db_name                = "my_dev_db"
+db_username            = "111f52cbda78f05997479e4954f7fa86"
+db_password            = "a3dbd5e9c80a1a7195b4524749f9c3df"
+db_deletion_protection = false
+db_allocated_storage   = 30

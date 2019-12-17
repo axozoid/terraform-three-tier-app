@@ -3,8 +3,7 @@
 ### create a VPC
 resource "aws_vpc" "main" {
   cidr_block = "${var.main_vpc_cidr}"
-  # instance_tenancy = "dedicated"
-  tags = var.main_vpc_tags
+  tags       = var.main_vpc_tags
 }
 
 ### create an IGW

@@ -24,14 +24,6 @@ variable "subnet_bastion" {
     az   = "ap-southeast-2a"
   }
 }
-# variable "subnet_nat_gateway" {
-#   type = "map"
-#   default = {
-#     name    = "subnet_nat_gateway"
-#     cidr = "10.20.1.128/25"
-#     az = "ap-southeast-2b"
-#   }
-# }
 
 # private
 variable "subnet_a_frontend" {
@@ -68,6 +60,23 @@ variable "subnet_b_backend" {
   }
 }
 
+variable "subnet_a_db" {
+  type = "map"
+  default = {
+    name = "subnet_a_backend"
+    cidr = "10.20.4.0/25"
+    az   = "ap-southeast-2a"
+  }
+}
+variable "subnet_b_db" {
+  type = "map"
+  default = {
+    name = "subnet_b_backend"
+    cidr = "10.20.4.128/25"
+    az   = "ap-southeast-2b"
+  }
+}
+
 # naming
 variable "igw" {
   type    = string
@@ -90,11 +99,23 @@ variable "lb_frontend" {
   type    = string
   default = "lb-frontend"
 }
+variable "lb_backend" {
+  type    = string
+  default = "lb-backend"
+}
 variable "lb_frontend_protocol" {
   type    = string
   default = "http"
 }
+variable "lb_backend_protocol" {
+  type    = string
+  default = "http"
+}
 variable "lb_frontend_target_health_protocol" {
+  type    = string
+  default = "HTTP"
+}
+variable "lb_backend_target_health_protocol" {
   type    = string
   default = "HTTP"
 }
@@ -110,8 +131,16 @@ variable "sgr_frontend_ingress_port" {
   type    = number
   default = 80
 }
+variable "sgr_backend_ingress_port" {
+  type    = number
+  default = 80
+}
 # launch config instance type for frontend
 variable "lc_frontend_instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+variable "lc_backend_instance_type" {
   type    = string
   default = "t2.micro"
 }
@@ -135,6 +164,10 @@ variable "lc_frontend_root_device_type" {
   type    = string
   default = "gp2"
 }
+variable "lc_backend_root_device_type" {
+  type    = string
+  default = "gp2"
+}
 variable "frontend_ami_id" {
   type    = string
   default = "ami-04a0f7552cff370ba"
@@ -143,7 +176,15 @@ variable "bastion_ami_id" {
   type    = string
   default = "ami-04a0f7552cff370ba"
 }
+variable "backend_ami_id" {
+  type    = string
+  default = "ami-04a0f7552cff370ba"
+}
 variable "lc_frontend_root_device_size" {
+  type    = number
+  default = 20
+}
+variable "lc_backend_root_device_size" {
   type    = number
   default = 20
 }
@@ -152,7 +193,16 @@ variable "asg_frontend" {
   type    = string
   default = "asg_frontend"
 }
+variable "asg_backend" {
+  type    = string
+  default = "asg_backend"
+}
 variable "asg_frontend_health_check_type" {
+  type    = string
+  default = "ELB"
+}
+
+variable "asg_backend_health_check_type" {
   type    = string
   default = "ELB"
 }
@@ -165,8 +215,14 @@ variable "asg_frontend_max" {
   type    = number
   default = 6
 }
-
-### ASG scaling policy config
+variable "asg_backend_min" {
+  type    = number
+  default = 2
+}
+variable "asg_backend_max" {
+  type    = number
+  default = 6
+}
 
 # scale up
 variable "asg_scale_up" {
@@ -249,11 +305,77 @@ variable "sg_bastion_cidrs" {
   default = ["0.0.0.0/0", "1.2.3.4/32"]
 }
 
+variable "sg_backend" {
+  type    = string
+  default = "sg_backend"
+}
 
+variable "ssh_public_key" {
+  type    = string
+  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDaq2lzh7GmB+6Rx3WbRsPXV6IsfHwvz/1d2iOKTvRp7wLTy/UEKwQxt53nprDwNEm5+mbtc3T4Ylw/iywgZwzBF4xOtoeA6ux9Ycg/reTS6jf1J8xnD0RGkL51JuYTwtsBzgA7HPVLqUrQaZMHoGCtybyOMxxACjYoP9++2GgEinXoVumlbXiwbc00iMNI0GDmhYBOPReig5JjzVFHeGUoGICmXGHdFrpQzrAgPg2V7iMEbquqJk6afkv3wnmsyBPXUBvPBd/aquXlGjqgjw3Q8QW2nwbP2sLBr6AjvYlxxhOtB72YpGUCQRw6+3jMdryDiUnaWecYDrbHYXZql/TaSrkeMRsLjehMc1paQsSeaCIg3WnDyiWrFQcBIt9f6vH2UcZ87JQVnW3MV1gwx0L+sbllwhgWQ1bloTEJtLf2fTx51C3L+S3Jvc1iiLiWAqhWfeqKKB8TjzeFULsw0CoUar04A7WF7x/2i5U5YDKJpAZRCA26BGxPBvHYf6XfLrNb3ca8iPss+83IinNa6HZxuOWVAy5jOjuooFPvuj+rY+ryGFPkHUaftkTICVuSYrRiLqcBb+y4ad1XMv4YmZmkcfcL/gr/eeeZNOaMrJ2Vvj7OA9LbBnAPEyf6G5YuWulvIblHhDax3/GPAw5e9bbI0Owbz/w4MQyzkXmJP+51vw=="
+}
+variable "ssh_key_name" {
+  type    = string
+  default = "tf-key"
+}
 
+variable "db_allocated_storage" {
+  type    = number
+  default = 20
+}
+variable "db_backup_retention_period" {
+  type    = number
+  default = 14
+}
+variable "db_storage_type" {
+  type    = string
+  default = "gp2"
+}
+variable "db_engine" {
+  type    = string
+  default = "mysql"
+}
 
+variable "db_engine_version" {
+  type    = string
+  default = "5.7"
+}
+variable "db_instance_class" {
+  type    = string
+  default = "db.t2.micro"
+}
+variable "db_name" {
+  type    = string
+  default = "my_app_db"
+}
+variable "db_identifier_prefix" {
+  type    = string
+  default = "db-main-"
+}
+variable "db_subnets" {
+  type    = string
+  default = "db_subnets"
+}
+variable "db_apply_immediately" {
+  type    = bool
+  default = false
+}
+variable "db_deletion_protection" {
+  type    = bool
+  default = false
+}
+variable "db_publicly_accessible" {
+  type    = bool
+  default = false
+}
+variable "db_multi_az" {
+  type    = bool
+  default = false
+}
+variable "db_username" {
+  type = string
+}
+variable "db_password" {
+  type = string
+}
 
-# variable "svc_exposed_azs" {
-#   type = list
-#   default = ["ap-southeast-2a","ap-southeast-2b"]
-# }

@@ -112,16 +112,6 @@ resource "aws_autoscaling_group" "asg_frontend" {
   # }
 }
 
-# Elastic IP for an ELB
-resource "aws_eip" "eip_lb_frontend" {
-  vpc        = true
-  depends_on = ["aws_internet_gateway.igw"]
-
-  tags = {
-    Name = "EIP for lb_frontend"
-  }
-}
-
 # ELB
 resource "aws_elb" "lb_frontend" {
   name = "${var.lb_frontend}"
