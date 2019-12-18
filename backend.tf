@@ -7,6 +7,11 @@ resource "aws_subnet" "subnet_a_backend" {
   }
   availability_zone = "${var.subnet_a_backend["az"]}"
 }
+resource "aws_route_table_association" "rta_backend_a" {
+  subnet_id      = aws_subnet.subnet_a_backend.id
+  route_table_id = aws_route_table.rt_to_nat_gw.id
+}
+
 resource "aws_subnet" "subnet_b_backend" {
   vpc_id     = "${aws_vpc.main.id}"
   cidr_block = "${var.subnet_b_backend["cidr"]}"
@@ -15,7 +20,10 @@ resource "aws_subnet" "subnet_b_backend" {
   }
   availability_zone = "${var.subnet_b_backend["az"]}"
 }
-
+resource "aws_route_table_association" "rta_backend_b" {
+  subnet_id      = aws_subnet.subnet_b_backend.id
+  route_table_id = aws_route_table.rt_to_nat_gw.id
+}
 
 # SG for the backend servers with allowed access from frontend servers and a bastion only
 resource "aws_security_group" "sg_backend" {
@@ -82,6 +90,15 @@ resource "aws_autoscaling_group" "asg_backend" {
   }
   depends_on                = [aws_elb.lb_backend]
   wait_for_capacity_timeout = 0
+
+  tags = [
+    {
+      key                 = "Name"
+      value               = "${var.asg_backend_tag_name}"
+      propagate_at_launch = true
+    },
+  ]
+
 }
 
 # backend ELB
