@@ -35,3 +35,4 @@ db_username            = "admin"
 db_password            = "a3dbd5e9c80a1a7195b4524749f9c3df"
 db_deletion_protection = false
 db_allocated_storage   = 30
+db_skip_final_snapshot = false
