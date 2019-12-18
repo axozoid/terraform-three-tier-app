@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# create a route table with a route to the IGW
+# route to the IGW
 resource "aws_route_table" "rt_to_igw" {
   vpc_id = "${aws_vpc.main.id}"
 
@@ -26,6 +26,20 @@ resource "aws_route_table" "rt_to_igw" {
 
   tags = {
     Name = "${var.rt_to_igw}"
+  }
+}
+
+# route to the NAT gateway
+resource "aws_route_table" "rt_to_nat_gw" {
+  vpc_id = "${aws_vpc.main.id}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_nat_gateway.nat_gw.id}"
+  }
+
+  tags = {
+    Name = "${var.rt_to_nat_gw}"
   }
 }
 
