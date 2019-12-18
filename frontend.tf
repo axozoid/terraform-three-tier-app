@@ -131,7 +131,8 @@ resource "aws_elb" "lb_frontend" {
   name = "${var.lb_frontend}"
   #   load_balancer_type               = "network"
   cross_zone_load_balancing = true
-  subnets                   = ["${aws_subnet.subnet_a_frontend.id}", "${aws_subnet.subnet_b_frontend.id}"]
+  subnets                   = ["${aws_subnet.subnet_bastion.id}"]
+  # subnets                   = ["${aws_subnet.subnet_a_frontend.id}", "${aws_subnet.subnet_b_frontend.id}"]
 
   security_groups = ["${aws_security_group.sg_frontend_lb.id}"]
   #   availability_zones = ["${data.aws_availability_zones.all.names}"]
