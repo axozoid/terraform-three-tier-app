@@ -164,6 +164,10 @@ variable "sgr_db_port" {
   type    = number
   default = 3306
 }
+variable "db_skip_final_snapshot" {
+  type    = bool
+  default = true
+}
 variable "lc_frontend_root_device_type" {
   type    = string
   default = "gp2"
