@@ -63,7 +63,7 @@ variable "subnet_b_backend" {
 variable "subnet_a_db" {
   type = "map"
   default = {
-    name = "subnet_a_backend"
+    name = "subnet_a_db"
     cidr = "10.20.4.0/25"
     az   = "ap-southeast-2a"
   }
@@ -71,7 +71,7 @@ variable "subnet_a_db" {
 variable "subnet_b_db" {
   type = "map"
   default = {
-    name = "subnet_b_backend"
+    name = "subnet_b_db"
     cidr = "10.20.4.128/25"
     az   = "ap-southeast-2b"
   }
@@ -216,7 +216,7 @@ variable "asg_frontend_health_check_type" {
 
 variable "asg_backend_health_check_type" {
   type    = string
-  default = "ELB"
+  default = "EC2"
 }
 
 variable "asg_frontend_min" {
