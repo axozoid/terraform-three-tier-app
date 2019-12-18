@@ -51,4 +51,5 @@ var.db_username
 
 ## TODO
 * Convert this to a module;
+* Place bastion host into ASG;
 * Improve code base;
