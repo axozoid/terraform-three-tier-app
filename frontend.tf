@@ -7,6 +7,11 @@ resource "aws_subnet" "subnet_a_frontend" {
   }
   availability_zone = "${var.subnet_a_frontend["az"]}"
 }
+resource "aws_route_table_association" "rta_frontend_a" {
+  subnet_id      = aws_subnet.subnet_a_frontend.id
+  route_table_id = aws_route_table.rt_to_nat_gw.id
+}
+
 resource "aws_subnet" "subnet_b_frontend" {
   vpc_id     = "${aws_vpc.main.id}"
   cidr_block = "${var.subnet_b_frontend["cidr"]}"
@@ -14,6 +19,10 @@ resource "aws_subnet" "subnet_b_frontend" {
     Name = "${var.subnet_b_frontend["name"]}"
   }
   availability_zone = "${var.subnet_b_frontend["az"]}"
+}
+resource "aws_route_table_association" "rta_frontend_b" {
+  subnet_id      = aws_subnet.subnet_b_frontend.id
+  route_table_id = aws_route_table.rt_to_nat_gw.id
 }
 
 # SG for a frontend LB
@@ -107,9 +116,14 @@ resource "aws_autoscaling_group" "asg_frontend" {
   depends_on                = [aws_elb.lb_frontend]
   wait_for_capacity_timeout = 0
 
-  # tags = {
-  #   Name = "${var.asg_frontend}"
-  # }
+  tags = [
+    {
+      key                 = "Name"
+      value               = "${var.asg_frontend_tag_name}"
+      propagate_at_launch = true
+    },
+  ]
+
 }
 
 # ELB
