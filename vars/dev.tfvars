@@ -31,7 +31,7 @@ asg_backend_max = 4
 
 # database settings
 db_name                = "my_dev_db"
-db_username            = "111f52cbda78f05997479e4954f7fa86"
+db_username            = "admin"
 db_password            = "a3dbd5e9c80a1a7195b4524749f9c3df"
 db_deletion_protection = false
 db_allocated_storage   = 30

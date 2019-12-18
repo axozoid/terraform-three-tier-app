@@ -82,6 +82,10 @@ variable "igw" {
   type    = string
   default = "igw_main"
 }
+variable "rt_to_nat_gw" {
+  type    = string
+  default = "rt_to_nat_gw"
+}
 variable "sg_frontend_lb" {
   type    = string
   default = "sg_frontend_lb"
@@ -192,6 +196,14 @@ variable "lc_backend_root_device_size" {
 variable "asg_frontend" {
   type    = string
   default = "asg_frontend"
+}
+variable "asg_frontend_tag_name" {
+  type    = string
+  default = "frontend"
+}
+variable "asg_backend_tag_name" {
+  type    = string
+  default = "backend"
 }
 variable "asg_backend" {
   type    = string
