@@ -48,6 +48,35 @@ var.db_password
 var.db_username
   Enter a value: 
 ```
+## Outputs
+Once the stack is deployed, Terraform will print out some useful connection info, for e.g.:
+```
+Outputs:
+
+Bastion_Public_IP = [
+  "123.45.56.78",
+]
+Bastion_SSH_Port = [
+  22,
+]
+Frontend_Load_Balancer_DNS = [
+  "lb-frontend-93756961.ap-southeast-2.elb.amazonaws.com",
+]
+```
+
+If we go and hit the ELB's DNS name, we may see that there is a web server listening:
+```
+curl -s -I lb-frontend-93756961.ap-southeast-2.elb.amazonaws.com
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Content-Length: 612
+Content-Type: text/html
+Date: Wed, 18 Dec 2019 06:05:58 GMT
+ETag: "5df9bc44-264"
+Last-Modified: Wed, 18 Dec 2019 05:42:28 GMT
+Server: nginx/1.14.0 (Ubuntu)
+Connection: Close
+```
 
 ## TODO
 * Convert this to a module;
