@@ -8,7 +8,7 @@
 #   availability_zone = "${var.subnet_nat_gateway["az"]}"
 # }
 
-resource "aws_nat_gateway" "gw" {
+resource "aws_nat_gateway" "nat_gw" {
   allocation_id = "${aws_eip.eip_nat_gw.id}"
   subnet_id     = "${aws_subnet.subnet_bastion.id}"
 
