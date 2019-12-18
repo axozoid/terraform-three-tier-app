@@ -65,6 +65,7 @@ resource "aws_db_instance" "main_rds" {
   vpc_security_group_ids  = ["${aws_security_group.sg_db.id}"]
   publicly_accessible     = var.db_publicly_accessible
   db_subnet_group_name    = aws_db_subnet_group.db_subnets.id
+  skip_final_snapshot     = var.db_skip_final_snapshot
   # database with the name below will be created once the instance is provisioned
   name     = "${var.db_name}"
   username = "${var.db_username}"
