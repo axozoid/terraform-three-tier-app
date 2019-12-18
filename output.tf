@@ -6,3 +6,7 @@ output "Bastion_SSH_Port" {
   description = "Bastion host SSH port number."
   value       = ["${var.sg_bastion_port}"]
 }
+output "Frontend_Load_Balancer_DNS" {
+  description = "Bastion host SSH port number."
+  value       = ["${aws_elb.lb_frontend.dns_name}"]
+}
